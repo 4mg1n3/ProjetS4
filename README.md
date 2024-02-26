@@ -12,7 +12,7 @@ Make sure you have [Rust](https://www.rust-lang.org/tools/install) and [Cargo](h
 1. Clone the repository:
 
    ```bash
-   git clone [https://[github.com/yourusername/rust-audio-analysis](https://github.com/4mg1n3/ProjetS4).git](https://github.com/4mg1n3/ProjetS4.git)
+   git clone https://github.com/4mg1n3/ProjetS4.git
    cd rust-audio-analysis
    ```
 
