@@ -13,7 +13,7 @@ Make sure you have [Rust](https://www.rust-lang.org/tools/install) and [Cargo](h
 
    ```bash
    git clone https://github.com/4mg1n3/ProjetS4.git
-   cd rust-audio-analysis
+   cd ProjetS4
    ```
 
 2. Build and run the project:
