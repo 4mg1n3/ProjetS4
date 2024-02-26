@@ -58,4 +58,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - FFT and STFT computations are done using the [rustfft](https://github.com/awelkie/rustfft) library.
 - Audio file reading/writing is done using the [hound](https://github.com/ruuda/hound) library.
 
-Feel free to extend this README with additional sections or information relevant to your project.
