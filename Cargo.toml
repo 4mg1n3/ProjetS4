@@ -1,0 +1,19 @@
+[package]
+name = "projs4"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hound = "3.4.0"
+rustfft= "6.2.0"
+plotters = "0.3.5"
+riff-wave-reader = "0.1.0"
+apodize = "*"
+rodio = "*"
+crossterm = "*"
+plotters-bitmap ="0.3.3"
+error = "0.1.9"
+image = "0.24.0"
+palette = "0.7.5"
