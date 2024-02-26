@@ -197,8 +197,12 @@ fn plot_spectrogram(spectrogram: &[Vec<f32>], filename: &str) -> Result<(), Box<
 fn map_intensity_to_color(intensity: f32, min_value: f32, max_value: f32) -> RGBColor {
     let normalized_intensity = (intensity - min_value) / (max_value - min_value);
     let scaled_intensity = (normalized_intensity * 255.0) as u8;
-    RGBColor(scaled_intensity, scaled_intensity, 50)
+
+    let red_component = (scaled_intensity as f32).powf(1.5) as u8;
+
+    RGBColor(red_component, red_component - red_component / 5, red_component - red_component / 5)
 }
+
 
 
 
