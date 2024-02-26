@@ -9,6 +9,9 @@ use rustfft::FftPlanner;
 //use image::{Rgb, RgbImage};
 use std::collections::VecDeque;
 use rustfft::num_traits::Zero;
+use plotters::series::LineSeries;
+use plotters::chart::ChartBuilder;
+
 
 
 
@@ -206,6 +209,36 @@ fn map_intensity_to_color(intensity: f32, min_value: f32, max_value: f32) -> RGB
 
 
 
+fn plot_fft_result(fft_result: &[Complex<f32>], filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let half_len = fft_result.len() / 2;
+
+    // Calculate the minimum and maximum magnitudes for dynamic scaling
+    let min_magnitude = fft_result.iter().map(|complex| complex.norm()).fold(f32::INFINITY, f32::min);
+    let max_magnitude = fft_result.iter().map(|complex| complex.norm()).fold(f32::NEG_INFINITY, f32::max);
+
+    // Create a backend for plotting and a drawing area
+    let root = BitMapBackend::new(filename, (800, 600)).into_drawing_area();
+    root.fill(&WHITE)?;
+
+    // Create a chart with Plotters for the FFT
+    let mut fft_chart = ChartBuilder::on(&root)
+        .caption("FFT Plot", ("Arial", 30).into_font())
+        .x_label_area_size(30)
+        .y_label_area_size(30)
+        .build_cartesian_2d(0.0..half_len as f64, min_magnitude..max_magnitude)?;
+
+    // Configure the chart's mesh for FFT
+    fft_chart.configure_mesh().draw()?;
+
+    // Plot the FFT data
+    fft_chart.draw_series(LineSeries::new(
+        fft_result.iter().take(half_len).enumerate().map(|(i, complex)| (i as f64, complex.norm())),
+        &RED,
+    ))?;
+
+    Ok(())
+}
+
 
 
 fn execute1() -> Result<(), Box<dyn std::error::Error>>{
@@ -220,7 +253,7 @@ fn execute1() -> Result<(), Box<dyn std::error::Error>>{
     let _stft_result = stft(samples, window_size, overlap);
 
     let fft_len = fft_result.len();
-    let half_len = fft_len / 2;
+    let _half_len = fft_len / 2;
 
 
     // Plot waveform
@@ -235,26 +268,12 @@ fn execute1() -> Result<(), Box<dyn std::error::Error>>{
     let spectrogram_result = spectrogram(&sample2, window_size, overlap);
     plot_spectrogram(&spectrogram_result, "spectrogram_plot.png")?;
 
+    // Plot STFT
+    let fft_result = perform_fft(sample2);
+    if let Err(e) = plot_fft_result(&fft_result, "fft_plot.png") {
+        eprintln!("Error plotting FFT result: {}", e);
+    }
 
-    // Créer un backend de tracé et une zone de dessin
-    let root = BitMapBackend::new("fft_stft_plot1.png", (800, 600)).into_drawing_area();
-    root.fill(&WHITE)?;
-
-    // Créer un graphique avec Plotters pour la FFT
-    let mut fft_chart = ChartBuilder::on(&root)
-        .caption("FFT Plot", ("Arial", 30).into_font())
-        .x_label_area_size(30)
-        .y_label_area_size(30)
-        .build_cartesian_2d(0.0..half_len as f64, 0.0..1.0)?;
-
-    // Configurer la grille du graphique FFT
-    fft_chart.configure_mesh().draw()?;  
-
-     //Tracer les données FFT
-       fft_chart.draw_series(LineSeries::new(
-       fft_result.iter().take(half_len).enumerate().map(|(i, complex)| (i as f64, complex.norm() as f64)),
-       &RED,
-   ))?;
 /*
     // Créer un graphique avec Plotters pour la STFT
     let mut stft_chart = ChartBuilder::on(&root)
