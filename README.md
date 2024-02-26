@@ -1,4 +1,4 @@
-```markdown
+
 # Rust Audio Analysis
 
 This is a small Rust project for performing audio analysis, including FFT, STFT, waveform plotting, envelope calculation, and spectrogram visualization.
